@@ -1,24 +1,30 @@
 import axios from "axios";
+import {useStateContext} from "./context/ContextProvider.jsx";
 
 const axiosClient = axios.create({
-    baseURL: `${import.meta.env.VITE_API_BASE_URL}/api`
+  baseURL: `${import.meta.env.VITE_API_BASE_URL}/api`
 })
 
 axiosClient.interceptors.request.use((config) => {
-    const token = localStorage.get('ACCESS_TOKEN')
-    config.headers.Authorization = `Bearer ${token}`
-    return config;
+  const token = localStorage.getItem('ACCESS_TOKEN');
+  config.headers.Authorization = `Bearer ${token}`
+  return config;
 })
 
 axiosClient.interceptors.response.use((response) => {
-    return response;
+  return response
 }, (error) => {
-    const {response} = error;
-    if(response.status === 401){
-        localStorage.removeItem('ACCESS_TOKEN');
-    }
+  const {response} = error;
+  if (response.status === 401) {
+    localStorage.removeItem('ACCESS_TOKEN')
+    console.log('AxiosClient: '+ response.status)
+    // window.location.reload();
+  } else if (response.status === 404) {
+    //Show not found
+    console.log('AxiosClient: 404 Not Found')
+  }
 
-    throw error;
+  throw error;
 })
 
-export default axiosClient;
+export default axiosClient

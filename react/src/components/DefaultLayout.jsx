@@ -1,9 +1,11 @@
-import { NavLink, Link, Navigate, Outlet, useNavigate } from "react-router-dom"
-import { useStateContext } from "../contexts/ContextProvider"
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import axios from "axios"
-import { useEffect } from "react"
+
+import { NavLink, Link, Navigate, Outlet, useNavigate } from "react-router-dom"
+
+import {useStateContext} from "../context/ContextProvider.jsx";
+import axiosClient from "../axios-client.js";
+import {useEffect} from "react";
 
 const navigation = [
   { name: 'Dashboard', to: '/Dashboard', current: true },
@@ -20,31 +22,28 @@ function classNames(...classes) {
 }
 
 export default function DefaultLayout(){
-  const {user,token,setUser} = useStateContext();
+  const {user,token,setUser,setToken} = useStateContext();
 
-  const history = useNavigate();
+  if (!token) {
+    return <Navigate to="/masuk"/>
+  }
+
+  const onLogout = ev => {
+    ev.preventDefault()
+
+    axiosClient.post('/logout')
+      .then(() => {
+        setUser({})
+        setToken(null)
+      })
+  }
 
   useEffect(() => {
-    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
-    axios.get('http://localhost:8000/api/user')
-    .then((response) => {
-        setUser(response.data);
-    })
-
-    if(!token){
-      //history('/masuk');
-        //<Navigate to="/masuk"></Navigate>
-    }
-  }, []);
-    
-  const logoutHanlder = async () => {
-    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
-    await axios.post('http://localhost:8000/api/logout')
-    .then(() => {
-        localStorage.removeItem("ACCESS_TOKEN");
-        history('/masuk');
-    });
- };
+    axiosClient.get('/user')
+      .then(({data}) => {
+         setUser(data)
+      })
+  }, [])
 
     return (
         <div className="min-h-full">
@@ -88,7 +87,7 @@ export default function DefaultLayout(){
                     </div>
                     <MenuItems transition className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in">
                         <MenuItem>
-                          <Link onClick={logoutHanlder} className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100">Keluar</Link>
+                          <Link onClick={onLogout} className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100">Keluar</Link>
                         </MenuItem>
                     </MenuItems>
                   </Menu>
