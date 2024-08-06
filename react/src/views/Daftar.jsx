@@ -51,7 +51,7 @@ export default function Daftar() {
               <img src="public/assets/img/image-3.webp" className="w-full h-full object-cover" alt="login-image" />
             </div>
 
-            <form className="max-w-xl w-full p-6 mx-auto" onSubmit={registerHandler}>
+            <form className="animate-fade-down animate-once animate-duration-200 max-w-xl w-full p-6 mx-auto" onSubmit={registerHandler}>
               <div className="mb-12">
                 <h3 className="text-gray-800 text-4xl font-extrabold">Sign Up</h3>
                 <p className="text-gray-800 text-sm mt-6">Already registered ?<Link to="/masuk" className="text-blue-600 font-semibold hover:underline ml-1 whitespace-nowrap">Sign in here</Link></p>

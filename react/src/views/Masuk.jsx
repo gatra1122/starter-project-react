@@ -38,14 +38,14 @@ export default function Masuk() {
   };
 
     return (
-      <div >
+      <div>
         <div className="font-[sans-serif]">
           <div className="grid lg:grid-cols-2 md:grid-cols-2 items-center gap-4">
             <div className="max-md:order-1 h-screen min-h-full">
               <img src="public/assets/img/image-3.webp" className="w-full h-full object-cover" alt="login-image" />
             </div>
 
-            <form className="max-w-xl w-full p-6 mx-auto" onSubmit={onSubmit}>
+            <form className="animate-fade-down animate-once animate-duration-200 max-w-xl w-full p-6 mx-auto" onSubmit={onSubmit}>
               <div className="mb-12">
                 <h3 className="text-gray-800 text-4xl font-extrabold">Sign in</h3>
                 <p className="text-gray-800 text-sm mt-6">Don't have an account <Link to="/daftar" className="text-blue-600 font-semibold hover:underline ml-1 whitespace-nowrap">Register here</Link></p>
