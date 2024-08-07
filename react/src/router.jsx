@@ -5,7 +5,7 @@ import Masuk from "./views/Masuk.jsx";
 import Daftar from "./views/Daftar.jsx";
 import Dashboard from "./views/Dashboard.jsx";
 import NotFound from "./views/NotFound.jsx";
-import Pengguna from "./views/Pengguna.jsx";
+import DataContoh from "./views/DataContoh.jsx";
 
 const router = createBrowserRouter([
     {
@@ -21,8 +21,8 @@ const router = createBrowserRouter([
                 element: <Dashboard/>
             },
             {
-                path: '/pengguna',
-                element: <Pengguna/>
+                path: '/datacontoh',
+                element: <DataContoh/>
             }
         ]
     },

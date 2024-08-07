@@ -1,7 +1,7 @@
 import {createContext, useContext, useState} from "react";
 
 const StateContext = createContext({
-  currentUser: null,
+  user: null,
   token: null,
   setUser: () => {},
   setToken: () => {},
@@ -10,7 +10,6 @@ const StateContext = createContext({
 export const ContextProvider = ({children}) => {
   const [user, setUser] = useState({});
   const [token, _setToken] = useState(localStorage.getItem('ACCESS_TOKEN'));
-  const [bilah, setBilah] = useState(true);
 
   const setToken = (token) => {
     _setToken(token)
@@ -27,8 +26,6 @@ export const ContextProvider = ({children}) => {
       setUser,
       token,
       setToken,
-      bilah,
-      setBilah
     }}>
       {children}
     </StateContext.Provider>

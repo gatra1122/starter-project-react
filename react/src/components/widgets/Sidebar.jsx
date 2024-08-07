@@ -4,67 +4,54 @@ import {
     List,
     ListItem,
     ListItemPrefix,
-    ListItemSuffix,
-    Chip,
   } from "@material-tailwind/react";
   import {
-    PresentationChartBarIcon,
-    ShoppingBagIcon,
-    UserCircleIcon,
-    Cog6ToothIcon,
-    InboxIcon,
-    PowerIcon,
+    HomeIcon,
+    TableCellsIcon,
   } from "@heroicons/react/24/solid";
+  import { Link, useLocation } from "react-router-dom";
+  import { useState } from "react";
    
   export function Sidebar() {
+    let location = useLocation();
     return (
-        <Card className="rounded-none h-full w-full max-w-[20rem] p-4 shadow-xl shadow-blue-gray-900/5">
-          <div className="mb-2 p-4">
-            <Typography variant="h5" color="blue-gray">
-              Sidebar
-            </Typography>
-          </div>
-          <List>
-            <ListItem>
-              <ListItemPrefix>
-                <PresentationChartBarIcon className="h-5 w-5" />
-              </ListItemPrefix>
-              Dashboard
-            </ListItem>
-            <ListItem>
-              <ListItemPrefix>
-                <ShoppingBagIcon className="h-5 w-5" />
-              </ListItemPrefix>
-              E-Commerce
-            </ListItem>
-            <ListItem>
-              <ListItemPrefix>
-                <InboxIcon className="h-5 w-5" />
-              </ListItemPrefix>
-              Inbox
-              <ListItemSuffix>
-                <Chip value="14" size="sm" variant="ghost" color="blue-gray" className="rounded-full" />
-              </ListItemSuffix>
-            </ListItem>
-            <ListItem>
-              <ListItemPrefix>
-                <UserCircleIcon className="h-5 w-5" />
-              </ListItemPrefix>
-              Profile
-            </ListItem>
-            <ListItem>
-              <ListItemPrefix>
-                <Cog6ToothIcon className="h-5 w-5" />
-              </ListItemPrefix>
-              Settings
-            </ListItem>
-            <ListItem>
-              <ListItemPrefix>
-                <PowerIcon className="h-5 w-5" />
-              </ListItemPrefix>
-              Log Out
-            </ListItem>
-          </List>
+        <Card className="flex rounded-none h-full w-full max-w-[20rem] p-4 shadow-xl shadow-blue-gray-900/5">
+            <div className="p-2">
+                <Typography
+                    variant="h5"
+                    color="blue-gray"
+                    className="cursor-default"
+                >
+                    Menu
+                </Typography>
+                <hr />
+            </div>
+            <List>
+                <Link to="/dashboard">
+                    <ListItem
+                        selected={
+                            location.pathname == "/dashboard" ? true : false
+                        }
+                    >
+                        <ListItemPrefix>
+                            <HomeIcon className="h-5 w-5" />
+                        </ListItemPrefix>
+                        Dashboard
+                    </ListItem>
+                </Link>
+                <Link to="/datacontoh">
+                    <ListItem
+                        selected={
+                            location.pathname == "/datacontoh" ? true : false
+                        }
+                    >
+                        <ListItemPrefix>
+                            <TableCellsIcon className="h-5 w-5" />
+                        </ListItemPrefix>
+                        Data Contoh
+                    </ListItem>
+                </Link>
+            </List>
         </Card>
     );
   }

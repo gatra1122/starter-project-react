@@ -1,6 +1,6 @@
 export function Footer() {
   return (
-    <footer className="mt-auto py-2">
+    <footer className="text-blue-gray-600 py-2">
         <div className="flex w-full flex-wrap items-center justify-center gap-6 px-2 md:justify-between">
             <p className="block antialiased font-sans text-sm leading-normal font-normal text-inherit">© 2024, made with
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" className="-mt-0.5 inline-block h-3.5 w-3.5 text-red-600">
