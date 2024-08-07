@@ -1,60 +1,39 @@
-import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
-import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
-
-import { NavLink, Link, Navigate, Outlet, useNavigate } from "react-router-dom"
-
+import { Navigate, Outlet } from "react-router-dom"
 import {useStateContext} from "../context/ContextProvider.jsx";
 import axiosClient from "../axios-client.js";
-import {useEffect} from "react";
+import {useEffect,useState} from "react";
 import { Sidebar } from './widgets/Sidebar.jsx';
 import { Footer } from './widgets/Footer.jsx';
-import NavbarBaru from './widgets/NavbarBaru.jsx';
-
-const navigation = [
-  { name: 'Dashboard', to: '/Dashboard', current: true },
-  { name: 'Pengguna', to: '/Pengguna', current: false },
-]
-const userNavigation = [
-  { name: 'Your Profile', href: '#' },
-  { name: 'Settings', href: '#' },
-  { name: 'Sign out', href: '#' },
-]
-
-function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
-}
+import Navbar from './widgets/Navbar.jsx';
+import { SidebarWithBurgerMenu } from "./widgets/SidebarWithBurgerMenu.jsx";
 
 export default function DefaultLayout(){
+  const [isLoading, setIsLoading] = useState(false);
   const {user,token,setUser,setToken} = useStateContext();
+  const test2 = SidebarWithBurgerMenu;
+
+  useEffect(() => {
+    setIsLoading(true)
+    axiosClient.get('/user')
+      .then(({data}) => {
+        setIsLoading(false)
+         setUser(data)
+      })
+      .catch(() => {
+        setIsLoading(false)
+      })
+  }, [])
 
   if (!token) {
     return <Navigate to="/masuk"/>
   }
-
-  const onLogout = ev => {
-    ev.preventDefault()
-
-    axiosClient.post('/logout')
-      .then(() => {
-        setUser({})
-        setToken(null)
-      })
-  }
-
-  useEffect(() => {
-    axiosClient.get('/user')
-      .then(({data}) => {
-         setUser(data)
-      })
-  }, [])
-
     return (
       <div className="bg-blue-gray-50/50">
-        <aside className="bg-white shadow-sm -translate-x-80 fixed inset-0 z-50 my-4 ml-4 h-[calc(100vh-32px)] w-72 rounded-xl transition-transform duration-300 xl:translate-x-0 border border-blue-gray-100">
+        <div className="flex flex-col h-screen p-4 xl:ml-80">
+        <aside className="-translate-x-80 fixed inset-0 z-50 h-full w-72 transition-transform duration-300 xl:translate-x-0 border border-blue-gray-100">
           <Sidebar></Sidebar>
         </aside>
-        <div className="flex flex-col h-screen p-4 xl:ml-80">
-          <NavbarBaru></NavbarBaru>
+          <Navbar {...user} memuat={isLoading}></Navbar>
           <div className="flex-grow py-2">
             <Outlet></Outlet>
           </div>
