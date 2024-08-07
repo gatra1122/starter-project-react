@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDataContohsTable extends Migration
+class CreateDataContohTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,12 @@ class CreateDataContohsTable extends Migration
      */
     public function up()
     {
-        Schema::create('data_contohs', function (Blueprint $table) {
+        Schema::create('data_contoh', function (Blueprint $table) {
             $table->id();
+            $table->string('nama');
+            $table->string('npm')->unique();;
+            $table->string('fakultas');
+            $table->integer('semester');
             $table->timestamps();
         });
     }
@@ -26,6 +30,6 @@ class CreateDataContohsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('data_contohs');
+        Schema::dropIfExists('data_contoh');
     }
 }

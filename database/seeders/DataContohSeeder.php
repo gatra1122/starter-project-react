@@ -5,15 +5,15 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\DataContoh;
 
-class DatabaseSeeder extends Seeder
+class DataContohSeeder extends Seeder
 {
     /**
-     * Seed the application's database.
+     * Run the database seeds.
      *
      * @return void
      */
     public function run()
     {
-        DataContoh::factory(50)->create();
+        //DataContoh::factory(30)->create();
     }
 }

@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class DataContoh extends Model
 {
     use HasFactory;
+    protected $table = 'data_contoh';
+    protected $guarded = ['id'];
 }
