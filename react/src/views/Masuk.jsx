@@ -2,9 +2,9 @@ import { useState } from "react";
 import {useStateContext} from "../context/ContextProvider.jsx";
 import axiosClient from "../axios-client.js";
 import {createRef} from "react";
-import { Link, useNavigate } from "react-router-dom"
+import { Link } from "react-router-dom"
 import { EnvelopeIcon, EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline'
-import { Input, Button, Spinner } from "@material-tailwind/react";
+import { Input, Button } from "@material-tailwind/react";
 
 export default function Masuk() {
   const emailRef = createRef()
@@ -15,7 +15,7 @@ export default function Masuk() {
 
   const onSubmit = ev => {
     ev.preventDefault()
-    setIsLoading(true);
+    setIsLoading(true)
 
     const payload = {
       email: emailRef.current.value,
@@ -24,18 +24,19 @@ export default function Masuk() {
     axiosClient.post('/login', payload)
       .then(({data}) => {
         setUser(data.user)
-        setToken(data.token);
-        setIsLoading(false);
+        setToken(data.token)
+        setIsLoading(false)
       })
       .catch((err) => {
         const response = err.response;
         if (response && response.status === 422) {
           setMessage(response.data.message)
-          setIsLoading(false);
+          setIsLoading(false)
+          
         }
       })
   }
-
+  debugger;
   const [passwordShown, setPasswordShown] = useState(false);
   const togglePasswordVisiblity = () => {
     setPasswordShown(passwordShown ? false : true);
@@ -55,11 +56,11 @@ export default function Masuk() {
               </div>
 
               {message &&
-                <div className="bg-red-100 text-red-800 p-4 rounded-lg" role="alert">
-                <strong className="font-bold text-sm mr-4">Error!</strong>
-                <span className="block text-sm sm:inline max-sm:mt-2">{message}</span>
+              <div className="bg-red-100 text-red-800 p-4 rounded-lg" role="alert">
+                <strong className="font-bold text-sm mr-4">Gagal !</strong><br />{message}
               </div>
               }
+
               <div className="mt-8">
                 <Input inputRef={emailRef} name="email" type="email" variant="standard" label="Email" placeholder="Masukkan alamat email" icon={<EnvelopeIcon/>} required/>
               </div>

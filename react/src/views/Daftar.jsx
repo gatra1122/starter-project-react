@@ -1,42 +1,43 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom"
+import { createRef, useState } from "react";
+import { Link } from "react-router-dom"
+import axiosClient from "../axios-client.js";
+import {useStateContext} from "../context/ContextProvider.jsx";
 import { EnvelopeIcon, EyeIcon, EyeSlashIcon, PencilIcon } from '@heroicons/react/24/outline'
-import axios from "axios";
+import { Input, Button, Spinner } from "@material-tailwind/react";
 
 export default function Daftar() {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [passwordConfirmation, setPasswordConfirmation] = useState("");
+  const nameRef = createRef()
+  const emailRef = createRef()
+  const passwordRef = createRef()
+  const passwordConfirmationRef = createRef()
+  const [isLoading, setIsLoading] = useState(false)
+  const {setUser, setToken} = useStateContext()
+  const [errors, setErrors] = useState(null)
 
-  const [validation, setValidation] = useState([]);
+  const onSubmit = ev => {
+    ev.preventDefault()
+    setIsLoading(true)
 
-  const history = useNavigate();
-
-    const registerHandler = async (e) => {
-      e.preventDefault();
-      
-      //initialize formData
-      const formData = new FormData();
-
-      //append data to formData
-      formData.append('name', name);
-      formData.append('email', email);
-      formData.append('password', password);
-      formData.append('password_confirmation', passwordConfirmation);
-
-      //send data to server
-      await axios.post('http://localhost:8000/api/register', formData)
-      .then(() => {
-          //redirect to login page
-          history('/');
+    const payload = {
+      name: nameRef.current.value,
+      email: emailRef.current.value,
+      password: passwordRef.current.value,
+      password_confirmation: passwordConfirmationRef.current.value,
+    }
+    axiosClient.post('/signup', payload)
+      .then(({data}) => {
+        setUser(data.user)
+        setToken(data.token);
+        setIsLoading(false)
       })
-      .catch((error) => {
-
-          //assign error to state "validation"
-          setValidation(error.response.data);
+      .catch(err => {
+        const response = err.response;
+        if (response && response.status === 422) {
+          setErrors(response.data.errors)
+          setIsLoading(false)
+        }
       })
-  };
+  }
 
   const [passwordShown, setPasswordShown] = useState(false);
   const togglePasswordVisiblity = () => {
@@ -51,74 +52,52 @@ export default function Daftar() {
               <img src="public/assets/img/image-3.webp" className="w-full h-full object-cover" alt="login-image" />
             </div>
 
-            <form className="animate-fade-down animate-once animate-duration-200 max-w-xl w-full p-6 mx-auto" onSubmit={registerHandler}>
+            <form className="animate-fade-down animate-once animate-duration-200 max-w-xl w-full p-6 mx-auto" onSubmit={onSubmit}>
               <div className="mb-12">
-                <h3 className="text-gray-800 text-4xl font-extrabold">Sign Up</h3>
-                <p className="text-gray-800 text-sm mt-6">Already registered ?<Link to="/masuk" className="text-blue-600 font-semibold hover:underline ml-1 whitespace-nowrap">Sign in here</Link></p>
+                <h3 className="text-gray-800 text-4xl font-extrabold">Daftar</h3>
+                <p className="text-gray-800 text-sm mt-6">Sudah punya akun ?<Link to="/masuk" className="text-blue-600 font-semibold hover:underline ml-1 whitespace-nowrap">Masuk disini</Link></p>
               </div>
 
-              <div>
-                <label className="text-gray-800 text-sm block mb-2">Name</label>
-                <div className="relative flex items-center">
-                  <input name="name" type="text" required value={name} onChange={(e) => setName(e.target.value)} 
-                  className={"w-full text-sm text-gray-800 border-b border-gray-300 focus:border-blue-600 px-2 py-3 outline-none " + (validation.name ? 'border-rose-500 invalid' : '')} placeholder="Enter full name" />
-                  <svg className="w-[18px] h-[18px] absolute right-2" opacity="0.5">
-                    <PencilIcon/>
-                  </svg>
-                </div>
-                {validation.name && (
-                <div className="alert alert-danger text-red-600">
-                    {validation.name[0]}
-                </div>
-                )}
-              </div>
+              {errors &&
+            <div className="bg-red-100 text-red-800 p-4 rounded-lg" role="alert">
+              <strong className="font-bold text-sm mr-4">Gagal !</strong>
+              <ul className="mt-2 ml-2 list-inside list-disc">
+              {Object.keys(errors).map(key => (
+                  <li key={key}>{errors[key][0]}</li>
+              ))}
+              </ul>
+            </div>
+          }
 
               <div className="mt-8">
-                <label className="text-gray-800 text-sm block mb-2">Email</label>
-                <div className="relative flex items-center">
-                  <input name="email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} 
-                  className={"w-full text-sm text-gray-800 border-b border-gray-300 focus:border-blue-600 px-2 py-3 outline-none " + (validation.email ? 'border-rose-500 invalid' : '')} placeholder="Enter email" />
-                  <svg className="w-[18px] h-[18px] absolute right-2" opacity="0.5">
-                    <EnvelopeIcon/>
-                  </svg>
-                </div>
-                {validation.email && (
-                <div className="alert alert-danger text-red-600">
-                    {validation.email[0]}
-                </div>
-                )}
+                <Input inputRef={nameRef} name="name" type="text" variant="standard" label="Nama" placeholder="Masukkan nama anda" icon={<PencilIcon/>} 
+                error={errors != null && errors.name ? 'error' : ''}
+                required/>
               </div>
-
               <div className="mt-8">
-                <label className="text-gray-800 text-sm block mb-2">Password</label>
-                <div className="relative flex items-center">
-                  <input name="password" type={passwordShown ? "text" : "password"} required value={password} onChange={(e) => setPassword(e.target.value)} 
-                  className={"w-full text-sm text-gray-800 border-b border-gray-300 focus:border-blue-600 px-2 py-3 outline-none " + (validation.password ? 'border-rose-500 invalid' : '')} placeholder="Enter password" />
-                  <svg onClick={togglePasswordVisiblity} className="w-[18px] h-[18px] absolute right-2" opacity="0.5">
-                    {passwordShown ? <EyeSlashIcon/> : <EyeIcon />}
-                  </svg>
-                </div>
-                {validation.password && (
-                <div className="alert alert-danger text-red-600">
-                    {validation.password[0]}
-                </div>
-                )}
+                <Input inputRef={emailRef} name="email" type="email" variant="standard" label="Email" placeholder="Masukkan alamat email" icon={<EnvelopeIcon/>}
+                error={errors != null && errors.email ? 'error' : ''}
+                required/>
               </div>
-
               <div className="mt-8">
-                <label className="text-gray-800 text-sm block mb-2">Confirm Password</label>
-                <div className="relative flex items-center">
-                  <input name="passwordConfirmation" type={passwordShown ? "text" : "password"} required value={passwordConfirmation} onChange={(e) => setPasswordConfirmation(e.target.value)} className="w-full text-sm text-gray-800 border-b border-gray-300 focus:border-blue-600 px-2 py-3 outline-none" placeholder="Enter password" />
-                  <svg onClick={togglePasswordVisiblity} className="w-[18px] h-[18px] absolute right-2" opacity="0.5">
-                    {passwordShown ? <EyeSlashIcon/> : <EyeIcon />}
-                  </svg>
-                </div>
+                <Input inputRef={passwordRef} name="password" type={passwordShown ? "text" : "password"} 
+                variant="standard" label="Password" placeholder="Masukkan password" 
+                icon={passwordShown ? <EyeSlashIcon onClick={togglePasswordVisiblity}/> : <EyeIcon onClick={togglePasswordVisiblity} />}
+                error={errors != null && errors.password ? 'error' : ''}
+                required/>
+              </div>
+              <div className="mt-8">
+                <Input inputRef={passwordConfirmationRef} name="password_confirmation" type={passwordShown ? "text" : "password"} 
+                variant="standard" label="Konfirmasi Password" placeholder="Konfirmasi password" 
+                icon={passwordShown ? <EyeSlashIcon onClick={togglePasswordVisiblity}/> : <EyeIcon onClick={togglePasswordVisiblity} />}
+                error={errors != null && errors.password ? 'error' : ''}
+                required/>
               </div>
 
               <div className="mt-12">
-                <button type="submit" className="w-full py-2.5 px-4 text-sm tracking-wide rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none">
-                  Sign up
-                </button>
+              <div className="mt-12">
+                <Button type="submit" className="animate-duration-1000" loading={isLoading} fullWidth>Daftar</Button>
+              </div>
               </div>
             </form>
           </div>

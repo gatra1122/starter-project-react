@@ -31,7 +31,7 @@ class AuthController extends Controller
         $credentials = $request->validated();
         if (!Auth::attempt($credentials)) {
             return response([
-                'message' => 'Provided email or password is incorrect'
+                'message' => 'Email atau password salah !',
             ], 422);
         }
 
@@ -44,8 +44,6 @@ class AuthController extends Controller
     public function logout(Request $request)
     {
         /** @var \App\Models\User $user */
-        // $user = $request->user();
-        // $user->currentAccessToken()->delete();
         $request->user()->currentAccessToken()->delete();
         return response('', 204);
     }

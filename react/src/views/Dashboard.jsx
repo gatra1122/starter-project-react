@@ -4,6 +4,7 @@ export default function Dashboard() {
     const {title,setTitle,bread,setBread} = usePageContext();
     const breadcrumList = [
         {
+            id: 1,
             name: "Dashboard",
             url: "#",
         },

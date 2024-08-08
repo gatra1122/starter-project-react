@@ -31,4 +31,11 @@ class LoginRequest extends FormRequest
             'remember' => 'boolean'
         ];
     }
+
+    public function messages(): array
+    {
+        return [
+            'email.exists' => 'Email belum terdaftar !',
+        ];
+    }
 }

@@ -58,7 +58,7 @@ export default function DefaultLayout(){
                                 <Breadcrumbs>
                                 {bread.map(function(data) {
                                   return (
-                                    <a href={data.url} className={data.url != '#' ? 'opacity-60' : ''}>{data.name}</a>
+                                    <a key={data.id} href={data.url} className={data.url != '#' ? 'opacity-60' : ''}>{data.name}</a>
                                   )
                                 })}
                                 </Breadcrumbs>

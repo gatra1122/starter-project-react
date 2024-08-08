@@ -22,7 +22,11 @@ class RegisterController extends Controller
             'name'      => 'required',
             'email'     => 'required|email|unique:users',
             'password'  => 'required|min:8|confirmed'
-        ]);
+        ],
+        [
+            'password' => 'Password yang anda masukkan tidak sama'
+        ]
+    );
 
         //if validation fails
         if ($validator->fails()) {
