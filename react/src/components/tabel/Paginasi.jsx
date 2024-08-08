@@ -10,7 +10,7 @@ import {
     getPaginationRowModel
 } from "@tanstack/react-table";
 
-export default function TabelContoh() {
+export default function Paginasi() {
     const [isLoading, setIsLoading] = useState(false);
     const [mahasiswa, setmahasiswa] = useState([]);
     const [meta, setMeta] = useState([]);

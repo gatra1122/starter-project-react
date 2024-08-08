@@ -1,6 +1,7 @@
 import {usePageContext} from "../context/ContextPage.jsx";
 import { useEffect } from "react";
 import TabelContoh from "../components/tabel/TabelContoh.jsx";
+import Paginasi from "../components/tabel/Paginasi.jsx";
 
 export default function DataContoh(){
   const judulPage = "Data Contoh"

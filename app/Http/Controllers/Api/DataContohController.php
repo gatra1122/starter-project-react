@@ -18,7 +18,8 @@ class DataContohController extends Controller
      */
     public function index()
     {
-        return DataContohResource::collection(DataContoh::query()->orderBy('id', 'desc')->paginate(10));
+        // return DataContohResource::collection(DataContoh::query()->orderBy('id', 'desc')->paginate(10));
+        return DataContohResource::collection(DataContoh::query()->orderBy('id', 'desc')->get());
     }
 
     /**
